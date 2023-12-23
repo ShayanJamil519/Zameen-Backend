@@ -1,17 +1,32 @@
-const app = require("./app");
-const dotenv = require("dotenv");
 const connectDataBase = require("./config/database");
+const dotenv = require("dotenv");
 const cloudinary = require("cloudinary");
+const errorMiddleware = require("./middleware/error");
+const express = require("express");
+const app = express();
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const fileUpload = require("express-fileupload");
 
-dotenv.config();
+app.use(express.json());
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(fileUpload());
 
-// Handling Uncaught Exception:
+dotenv.config({ path: "backend/config/config.env" });
 
-process.on("uncaughtException", (err) => {
-  console.log(`Error ${err.message}`);
-  console.log(`Shutting down the server due to unhandled exception`);
-  process.exit(1);
-});
+// Route Import:
+const sell = require("./routes/sellRoute");
+const user = require("./routes/userRoute");
+const project = require("./routes/projectRoute");
+const blog = require("./routes/blogRoute");
+const register = require("./routes/registerRoute");
+
+app.use("/api/v1", sell);
+app.use("/api/v1", user);
+app.use("/api/v1", project);
+app.use("/api/v1", blog);
+app.use("/api/v1", register);
 
 //Connecting to database:
 connectDataBase();
@@ -23,17 +38,8 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const server = app.listen(process.env.PORT, () => {
-  console.log(`Server is working on port http:localhost:${process.env.PORT}`);
-});
+app.use(errorMiddleware);
 
-// Unhandled Promise Rejection:
-
-process.on("unhandledRejection", (err) => {
-  console.log(`Error ${err.message}`);
-  console.log(`Shutting down the server due to Promise Rejection`);
-
-  server.close(() => {
-    process.exit(1);
-  });
+app.listen(5000, () => {
+  console.log("server listening on port ", 5000);
 });

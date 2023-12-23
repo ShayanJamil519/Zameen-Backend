@@ -15,19 +15,6 @@ app.use(fileUpload());
 // config:
 dotenv.config({ path: "backend/config/config.env" });
 
-// Route Import:
-const sell = require("./routes/sellRoute");
-const user = require("./routes/userRoute");
-const project = require("./routes/projectRoute");
-const blog = require("./routes/blogRoute");
-const register = require("./routes/registerRoute");
-
-app.use("/api/v1", sell);
-app.use("/api/v1", user);
-app.use("/api/v1", project);
-app.use("/api/v1", blog);
-app.use("/api/v1", register);
-
 //Middleware For Errors:
 
 app.use(errorMiddleware);

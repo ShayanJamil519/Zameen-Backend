@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
   phoneNo: {
     type: Number,
     required: true,
-    unique:true,
+    unique: true,
   },
   password: {
     type: String,
@@ -28,17 +28,17 @@ const userSchema = new mongoose.Schema({
     minLength: [8, "Name should more than 8 characters"],
     select: false, // find all except password field every where
   },
-  
-  avatar:{
+
+  avatar: {
     public_id: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     url: {
-        type: String,
-        required: true
-    }
-},
+      type: String,
+      required: true,
+    },
+  },
   role: {
     type: String,
     default: "user",

@@ -6,55 +6,35 @@ const sendEmail = require("../utils/sendEmail.js");
 const crypto = require("crypto");
 const cloudinary = require("cloudinary");
 
-// Register a User:
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    folder: "userimages",
-    width: 150,
-    crop: "scale",
-  });
+  try {
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "userimages",
+      width: 150,
+      crop: "scale",
+    });
 
-  const { name, email, password, phoneNo } = req.body;
+    const { name, email, password, phoneNo } = req.body;
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-    phoneNo,
-    avatar: {
-      public_id: myCloud.public_id,
-      url: myCloud.secure_url,
-    },
-  });
+    const user = await User.create({
+      name,
+      email,
+      password,
+      phoneNo,
+      avatar: {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      },
+    });
 
-  console.log("user");
-  console.log(user);
-
-  sendToken(user, 201, res);
+    // Send token in the response
+    sendToken(user, 201, res);
+  } catch (error) {
+    console.error("Error registering user:", error);
+    // Handle error and send an appropriate response
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
 });
-
-// Email:
-// const Url = `${req.protocol}://${req.get(
-//   "host"
-// )}/api/v1/registered`;
-// const message = `Getting started with with us you are successfully registered you can start with ${Url}`;
-
-// try {
-//   await sendEmail({
-//     email: user.email,
-//     subject: "User Registered",
-//     message,
-//   });
-
-//   res.status(200).json({
-//     success: true,
-//     message: `Email sent to ${user.email} successfully`,
-//   });
-// } catch (error) {
-//   return next(new ErrorHandler(err.message, 500));
-// }
-
-// sendToken(user, 201, res);
 
 // login a user:
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
@@ -110,7 +90,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const resetPasswordUrl = `${req.protocol}://${req.get(
     "host"
   )}/api/v1/password/reset/${resetToken}`;
-  const message = `Your password reset token is :- \n\n ${resetPasswordUrl} \n\n If you have ot requested this email 
+  const message = `Your password reset token is :- \n\n ${resetPasswordUrl} \n\n If you have not requested this email 
     then, ignore it`;
 
   try {
@@ -128,7 +108,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
     await user.save({ validateBeforeSave: false });
-    return next(new ErrorHandler(err.message, 500));
+    return next(new ErrorHandler(error.message, 500));
   }
 });
 
@@ -205,25 +185,6 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
     name: req.body.name,
     email: req.body.email,
   };
-
-  // if (req.body.avatar !== "") {
-  //   const user = await User.findById(req.user.id);
-
-  //   const imageId = user.avatar.public_id;
-
-  //   await cloudinary.v2.uploader.destroy(imageId);
-
-  //   const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-  //     folder: "avatars",
-  //     width: 150,
-  //     crop: "scale",
-  //   });
-
-  //   newUserData.avatar = {
-  //     public_id: myCloud.public_id,
-  //     url: myCloud.secure_url,
-  //   };
-  // }
 
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
