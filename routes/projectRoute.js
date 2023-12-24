@@ -15,7 +15,9 @@ const { isAuthenticatedUser, authorizedRoles } = require("../middleware/auth");
 const router = express.Router();
 
 // post
-router.route("/project/new").post(isAuthenticatedUser, authorizedRoles("admin"), createProject);
+router
+  .route("/project/new")
+  .post(isAuthenticatedUser, authorizedRoles("admin"), createProject);
 
 // get
 router.route("/projects").get(getAllProjects);
@@ -28,9 +30,9 @@ router
   .delete(authorizedRoles("admin"), deleteProject);
 
 // Create New Review or Update the review:
-router.route("/review").put(isAuthenticatedUser, createProjectReview);
+router.route("/review/project").put(isAuthenticatedUser, createProjectReview);
 
 // Get product review:
-router.route("/reviews").get(isAuthenticatedUser, getProjectReviews);
+router.route("/reviews/project").get(isAuthenticatedUser, getProjectReviews);
 
 module.exports = router;

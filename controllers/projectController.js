@@ -166,6 +166,13 @@ exports.createProjectReview = catchAsyncErrors(async (req, res, next) => {
 
   const project = await Project.findById(productId);
 
+  if (!project) {
+    return res.status(404).json({
+      success: false,
+      message: "Project not found",
+    });
+  }
+
   const isReviewed = project.reviews.find(
     (rev) => rev.user.toString() === req.user._id.toString()
   );
