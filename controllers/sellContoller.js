@@ -32,8 +32,6 @@ exports.createProperty = catchAsyncErrors(async (req, res, next) => {
 
   req.body.user = req.user._id;
 
-  
-
   const property = await Property.create(req.body);
 
   res.status(201).json({
@@ -43,33 +41,44 @@ exports.createProperty = catchAsyncErrors(async (req, res, next) => {
 });
 
 // Get All Property -->User
+// exports.getAllProperties = catchAsyncErrors(async (req, res, next) => {
+//   const resultPerPage = 10;
+//   const propertyCount = await Property.countDocuments();
+
+//   const apiFeature = new ApiFeatures(Property.find(), req.query)
+//     .search()
+//     .filter()
+//     .pagination(resultPerPage);
+
+//   let property = await apiFeature.query;
+//   console.log(property);
+
+//   let filteredPropertyCount = property.length;
+//   apiFeature.pagination(resultPerPage);
+
+//   // const products = await Product.find();
+//   property = await apiFeature.query;
+
+//   res.status(200).json({
+//     success: true,
+//     property,
+//     propertyCount,
+//     resultPerPage,
+//     filteredPropertyCount,
+//   });
+// });
+
 exports.getAllProperties = catchAsyncErrors(async (req, res, next) => {
-  const resultPerPage = 10;
-  const propertyCount = await Property.countDocuments();
-  const apiFeature = new ApiFeatures(Property.find(), req.query)
-    .search()
-    .filter();
-  // .pagination(resultPerPage);
-
-  let property = await apiFeature.query;
-  let filteredPropertyCount = property.length;
-  apiFeature.pagination(resultPerPage);
-
-  // const products = await Product.find();
-  property = await apiFeature.query;
+  let properties = await Property.find();
 
   res.status(200).json({
     success: true,
-    property,
-    propertyCount,
-    resultPerPage,
-    filteredPropertyCount,
+    properties,
   });
 });
 
 // Get All Property -->User 2
 exports.getAllProperty = catchAsyncErrors(async (req, res, next) => {
- 
   const property = await Property.find();
 
   res.status(200).json({
