@@ -16,8 +16,8 @@ exports.createProject = catchAsyncErrors(async (req, res, next) => {
 
   const imagesLinks = [];
 
-  for (let i = 0; i < images.length; i++) {
-    const result = await cloudinary.v2.uploader.upload(images[i], {
+  for (const image of images) {
+    const result = await cloudinary.v2.uploader.upload(image, {
       folder: "products",
     });
 
@@ -46,14 +46,11 @@ exports.getAllProjects = catchAsyncErrors(async (req, res, next) => {
   const apiFeature = new ApiFeatures(Project.find(), req.query)
     .filter()
     .search();
-  // .filter();
-  // .pagination(resultPerPage);
 
   let project = await apiFeature.query;
   let filteredProjectCount = project.length;
   apiFeature.pagination(resultPerPage);
 
-  // const products = await Product.find();
   project = await apiFeature.query;
 
   res.status(200).json({
@@ -88,37 +85,6 @@ exports.updateProject = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("project not found", 404));
   }
 
-  // Images Start Here
-  // let images = [];
-
-  // if (typeof req.body.images === "string") {
-  //   images.push(req.body.images);
-  // } else {
-  //   images = req.body.images;
-  // }
-
-  // if (images !== undefined) {
-  //   // Deleting Images From Cloudinary
-  //   for (let i = 0; i < product.images.length; i++) {
-  //     await cloudinary.v2.uploader.destroy(product.images[i].public_id);
-  //   }
-
-  //   const imagesLinks = [];
-
-  //   for (let i = 0; i < images.length; i++) {
-  //     const result = await cloudinary.v2.uploader.upload(images[i], {
-  //       folder: "products",
-  //     });
-
-  //     imagesLinks.push({
-  //       public_id: result.public_id,
-  //       url: result.secure_url,
-  //     });
-  //   }
-
-  //   req.body.images = imagesLinks;
-  // }
-
   project = await Project.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -137,13 +103,8 @@ exports.deleteProject = catchAsyncErrors(async (req, res, next) => {
   const project = await Project.findById(req.params.id);
 
   if (!project) {
-    return next(new ErrorHander("project not found", 404));
+    return next(new ErrorHandler("project not found", 404));
   }
-
-  // Deleting Images From Cloudinary
-  // for (let i = 0; i < product.images.length; i++) {
-  //   await cloudinary.v2.uploader.destroy(product.images[i].public_id);
-  // }
 
   await project.remove();
 
@@ -156,7 +117,7 @@ exports.deleteProject = catchAsyncErrors(async (req, res, next) => {
 // Create New Review or Update the review:
 
 exports.createProjectReview = catchAsyncErrors(async (req, res, next) => {
-  const { rating, comment, productId } = req.body;
+  const { rating, productId } = req.body;
 
   const review = {
     user: req.user._id,

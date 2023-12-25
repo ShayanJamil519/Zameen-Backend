@@ -18,15 +18,15 @@ exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
 
 exports.authorizedRoles = (...roles) => {
   return (req, res, next) => {
-    if (!req.user || !req.user.role) {
+    if (!req?.user || !req?.user?.role) {
       return next(new ErrorHandler("User role not defined", 500));
     }
 
     //If user
-    if (!roles.includes(req.user.role)) {
+    if (!roles.includes(req?.user?.role)) {
       return next(
         new ErrorHandler(
-          `Role: ${req.user.role} is not allowed to access this resource`,
+          `Role: ${req?.user?.role} is not allowed to access this resource`,
           403
         )
       );

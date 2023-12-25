@@ -1,7 +1,6 @@
 const Property = require("../models/sellModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const ApiFeatures = require("../utils/apifeatures");
 const cloudinary = require("cloudinary");
 
 // Create Property :
@@ -17,8 +16,8 @@ exports.createProperty = catchAsyncErrors(async (req, res, next) => {
 
   const imagesLinks = [];
 
-  for (let i = 0; i < images.length; i++) {
-    const result = await cloudinary.v2.uploader.upload(images[i], {
+  for (const image of images) {
+    const result = await cloudinary.v2.uploader.upload(image, {
       folder: "property",
     });
 
@@ -39,34 +38,6 @@ exports.createProperty = catchAsyncErrors(async (req, res, next) => {
     property,
   });
 });
-
-// Get All Property -->User
-// exports.getAllProperties = catchAsyncErrors(async (req, res, next) => {
-//   const resultPerPage = 10;
-//   const propertyCount = await Property.countDocuments();
-
-//   const apiFeature = new ApiFeatures(Property.find(), req.query)
-//     .search()
-//     .filter()
-//     .pagination(resultPerPage);
-
-//   let property = await apiFeature.query;
-//   console.log(property);
-
-//   let filteredPropertyCount = property.length;
-//   apiFeature.pagination(resultPerPage);
-
-//   // const products = await Product.find();
-//   property = await apiFeature.query;
-
-//   res.status(200).json({
-//     success: true,
-//     property,
-//     propertyCount,
-//     resultPerPage,
-//     filteredPropertyCount,
-//   });
-// });
 
 exports.getAllProperties = catchAsyncErrors(async (req, res, next) => {
   let properties = await Property.find();
@@ -120,37 +91,6 @@ exports.updateProperty = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Property not found", 404));
   }
 
-  // Images Start Here
-  // let images = [];
-
-  // if (typeof req.body.images === "string") {
-  //   images.push(req.body.images);
-  // } else {
-  //   images = req.body.images;
-  // }
-
-  // if (images !== undefined) {
-  //   // Deleting Images From Cloudinary
-  //   for (let i = 0; i < product.images.length; i++) {
-  //     await cloudinary.v2.uploader.destroy(product.images[i].public_id);
-  //   }
-
-  //   const imagesLinks = [];
-
-  //   for (let i = 0; i < images.length; i++) {
-  //     const result = await cloudinary.v2.uploader.upload(images[i], {
-  //       folder: "products",
-  //     });
-
-  //     imagesLinks.push({
-  //       public_id: result.public_id,
-  //       url: result.secure_url,
-  //     });
-  //   }
-
-  //   req.body.images = imagesLinks;
-  // }
-
   property = await Property.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -169,13 +109,8 @@ exports.deleteProperty = catchAsyncErrors(async (req, res, next) => {
   const property = await Property.findById(req.params.id);
 
   if (!property) {
-    return next(new ErrorHander("Property not found", 404));
+    return next(new ErrorHandler("Property not found", 404));
   }
-
-  // Deleting Images From Cloudinary
-  // for (let i = 0; i < product.images.length; i++) {
-  //   await cloudinary.v2.uploader.destroy(product.images[i].public_id);
-  // }
 
   await property.remove();
 
@@ -200,7 +135,7 @@ exports.getAllPropertiesOfSpecificUser = catchAsyncErrors(
 // Create New Review or Update the review:
 
 exports.createPropertyReview = catchAsyncErrors(async (req, res, next) => {
-  const { rating, comment, productId } = req.body;
+  const { rating, productId } = req.body;
 
   const review = {
     user: req.user._id,
