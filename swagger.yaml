@@ -1,0 +1,112 @@
+/**
+ * @swagger
+ * path:
+ *   /api/v1/login:
+ *     post:
+ *       summary: Login user
+ *       tags:
+ *         - User
+ *       requestBody:
+ *         description: User login credentials
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 email:
+ *                   type: string
+ *                   format: email
+ *                   description: User email
+ *                 password:
+ *                   type: string
+ *                   format: password
+ *                   description: User password
+ *       responses:
+ *         200:
+ *           description: Successful login
+ *           content:
+ *             application/json:
+ *               example:
+ *                 success: true
+ *                 token: "generated_token_here"
+ *         400:
+ *           description: Bad request, missing or invalid parameters
+ *           content:
+ *             application/json:
+ *               example:
+ *                 success: false
+ *                 error: "Please enter password and email"
+ *         401:
+ *           description: Invalid email or password
+ *           content:
+ *             application/json:
+ *               example:
+ *                 success: false
+ *                 error: "Invalid Email or Password"
+ *         500:
+ *           description: Internal Server Error
+ *           content:
+ *             application/json:
+ *               example:
+ *                 success: false
+ *                 error: "Internal Server Error"
+ */
+
+
+
+ /**
+ * @swagger
+ * path:
+ *   /api/v1/register:
+ *     post:
+ *       summary: Register user
+ *       tags:
+ *         - User
+ *       requestBody:
+ *         description: User registration details
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                   description: User's name
+ *                 email:
+ *                   type: string
+ *                   format: email
+ *                   description: User's email
+ *                 password:
+ *                   type: string
+ *                   format: password
+ *                   description: User's password
+ *                 phoneNo:
+ *                   type: string
+ *                   description: User's phone number
+ *       responses:
+ *         201:
+ *           description: User registered successfully
+ *           content:
+ *             application/json:
+ *               example:
+ *                 success: true
+ *                 token: "generated_token_here"
+ *         400:
+ *           description: Bad request, missing or invalid parameters
+ *           content:
+ *             application/json:
+ *               example:
+ *                 success: false
+ *                 error: "Please provide name, email, password, and phone number"
+ *         500:
+ *           description: Internal Server Error
+ *           content:
+ *             application/json:
+ *               example:
+ *                 success: false
+ *                 error: "Internal Server Error"
+ */
+
+
