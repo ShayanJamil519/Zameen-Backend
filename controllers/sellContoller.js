@@ -29,7 +29,7 @@ exports.createProperty = catchAsyncErrors(async (req, res, next) => {
 
   req.body.images = imagesLinks;
 
-  req.body.user = req.user._id;
+  req.body.user = "658bc5350fc1593e2848e6db";
 
   const property = await Property.create(req.body);
 

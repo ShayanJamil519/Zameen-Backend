@@ -28,9 +28,6 @@ exports.createProject = catchAsyncErrors(async (req, res, next) => {
   }
 
   req.body.images = imagesLinks;
-
-  req.body.user = req.user.id;
-
   const project = await Project.create(req.body);
 
   res.status(201).json({

@@ -17,7 +17,7 @@ const router = express.Router();
 // post
 router
   .route("/project/new")
-  .post(isAuthenticatedUser, authorizedRoles("admin"), createProject);
+  .post( createProject);
 
 // get
 router.route("/projects").get(getAllProjects);
@@ -26,13 +26,13 @@ router.route("/projects").get(getAllProjects);
 router
   .route("/project/:id")
   .get(getProjectDetails)
-  .put(authorizedRoles("admin"), updateProject)
-  .delete(authorizedRoles("admin"), deleteProject);
+  .put( updateProject)
+  .delete( deleteProject);
 
 // Create New Review or Update the review:
-router.route("/review/project").put(isAuthenticatedUser, createProjectReview);
+router.route("/review/project").put(createProjectReview);
 
 // Get product review:
-router.route("/reviews/project").get(isAuthenticatedUser, getProjectReviews);
+router.route("/reviews/project").get( getProjectReviews);
 
 module.exports = router;

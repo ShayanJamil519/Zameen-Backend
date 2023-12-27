@@ -17,16 +17,16 @@ const { isAuthenticatedUser, authorizedRoles } = require("../middleware/auth");
 const router = express.Router();
 
 // get
-router.route("/admin/properties").get(isAuthenticatedUser, authorizedRoles("admin"), getAllPropertiesForAdmin);
+router.route("/admin/properties").get(getAllPropertiesForAdmin);
 
 // get --User
 router.route("/properties").get(getAllProperties);
 
 // get Get All Properties of a specific user
-router.route("/property/me").get(isAuthenticatedUser, getAllPropertiesOfSpecificUser);
+router.route("/property/me").get( getAllPropertiesOfSpecificUser);
 
 // post
-router.route("/property/new").post(isAuthenticatedUser, createProperty);
+router.route("/property/new").post( createProperty);
 
 //get specific product detail
 router.route("/property/:id").get(getPropertyDetails).put(updateProperty).delete(deleteProperty);

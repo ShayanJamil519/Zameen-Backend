@@ -14,7 +14,7 @@ const router = express.Router();
 // post
 router
   .route("/blog/new")
-  .post(isAuthenticatedUser, authorizedRoles("admin"), createBlog);
+  .post( createBlog);
 
 // get
 router.route("/blogs").get(getAllBlogs);
@@ -23,6 +23,6 @@ router.route("/blogs").get(getAllBlogs);
 router
   .route("/blog/:id")
   .get(getBlogById)
-  .delete(isAuthenticatedUser, authorizedRoles("admin"), deleteBlog);
+  .delete( deleteBlog);
 
 module.exports = router;

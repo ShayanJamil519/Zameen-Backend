@@ -8,18 +8,18 @@ const router = express.Router();
 
 
 // post
-router.route("/register/project/new/:id").post(isAuthenticatedUser, registerationInProject);
+router.route("/register/project/new/:id").post( registerationInProject);
 
 // get Get All projects of a specific user
-router.route("/register/project/me").get(isAuthenticatedUser, getAllRegistrationProjectOfSpecificUser);
+router.route("/register/project/me").get( getAllRegistrationProjectOfSpecificUser);
 
 // get Get All project registerations
 router
   .route("/admin/registerations")
-  .get(isAuthenticatedUser, authorizedRoles("admin"), getAllRegisterations);
+  .get(  getAllRegisterations);
 
 // put Update User Installment Status:
-router.route("/project/Installments/:id").put(isAuthenticatedUser, authorizedRoles("admin"), updateInstallmentStatus);
+router.route("/project/Installments/:id").put( updateInstallmentStatus);
 
 
 module.exports = router;

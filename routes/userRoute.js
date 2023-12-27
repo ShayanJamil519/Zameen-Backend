@@ -33,24 +33,24 @@ router.route("/password/forgot").post(forgotPassword);
 router.route("/password/reset/:token").put(resetPassword);
 
 // Get User Details
-router.route("/me").get(isAuthenticatedUser, getUserDetails);
+router.route("/me").get( getUserDetails);
 
 // Update User Password:
-router.route("/password/update").put(isAuthenticatedUser, updatePassword);
+router.route("/password/update").put( updatePassword);
 
 // Update User Profile:
-router.route("/me/update").put(isAuthenticatedUser, updateProfile);
+router.route("/me/update").put( updateProfile);
 
 // Get All User (Admin):
 router
   .route("/admin/users")
-  .get(isAuthenticatedUser, authorizedRoles("admin"), getAllUser);
+  .get( getAllUser);
 
 // Get Single User (Admin), Update User Role (Admin), Delete User (Admin):
 router
   .route("/admin/user/:id")
-  .get(isAuthenticatedUser, authorizedRoles("admin"), getSingleUser)
-  .put(isAuthenticatedUser, authorizedRoles("admin"), updateUserRole)
-  .delete(isAuthenticatedUser, authorizedRoles("admin"), deleteUser);
+  .get( getSingleUser)
+  .put( updateUserRole)
+  .delete( deleteUser);
 
 module.exports = router;
