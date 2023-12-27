@@ -22,6 +22,19 @@ exports.getAllBlogs = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+exports.getBlogById = catchAsyncErrors(async (req, res, next) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (!blog) {
+    return next(new ErrorHandler("Blog not found", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    blog,
+  });
+});
+
 // Delete Blog --User
 
 exports.deleteBlog = catchAsyncErrors(async (req, res, next) => {
